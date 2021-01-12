@@ -1,4 +1,4 @@
-# Instagram scrapper of publications and stories 2021.
+# Scrap Instagram content & stories | 2021 version.
 Enseirb-Matmeca, Bordeaux INP | [Anas AHOUZI](https://www.linkedin.com/in/anas-ahouzi-6aab0b155/)
 ***
 
