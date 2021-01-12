@@ -24,6 +24,9 @@ The repository contains the following files & directories:
 - Before executing the code, the user needs to get **browsermob-proxy-2.1.4** from [here](https://bmp.lightbody.net/) and put it in the project directory
 . This proxy will help us get access to the har file during the execution with Selenium.
 
+- **Scraping stories** is an easy task, since we don't need to analyze graphql responses or get the har file, we only access to Instagram and get every story using
+their XPath with selenium.
+
 - **For scraping content**, the user is asked to enter the username or hashtag he wants to scrap, then the program gets access
 to the username page. However, sometimes Instagram blocks the direct access to public pages, and asks the user to log in. In this case, the program types
 some random user account that was created for scraping purposes. After getting access to the page we want to scrape, **Selenium** executes a Javascript
@@ -34,11 +37,6 @@ graphql responses, in a json format. Finally, we loop through every response to 
 
 ![](https://j.gifs.com/k8YDNX.gif)
 
-- **Scraping stories** is easier, since we don't need to analyze graphql responses or get the har file, we only access to Instagram and get every story using
-their XPath. Here's a small demo of scraping **gadelmaleh** stories:
-
-
-![](https://j.gifs.com/K1gmRn.gif)
 
 
 
