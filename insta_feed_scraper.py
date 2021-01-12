@@ -1,7 +1,7 @@
 ############################################################################################
 #                                  Author: Anas AHOUZI                                     #
 #                               File Name: insta_feed_scraper.py                           #
-#                           Creation Date: January 11, 2020                                #
+#                           Creation Date: January 11, 2021                                #
 #                         Source Language: Python                                          #
 #           Repository: https://github.com/aahouzi/Instagram-Scraper-2021.git              #
 #                              --- Code Description ---                                    #
