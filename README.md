@@ -15,9 +15,10 @@ and by getting access to this file we can capture all the precious json files co
 
 ## :rocket: Repository Structure
 The repository contains the following files & directories:
-- **insta_feed_scrapper.py:** The code used for scraping content from a user/hashtag public page.
-- **story_scrapper.py:** Code for scrapping stories from a user public page.
+- **scraper/insta_feed_scrapper.py:** The code used for scraping content from a user/hashtag public page.
+- **scraper/story_scrapper.py:** Code for scrapping stories from a user public page.
 - **collected_data:** It contains the collected feed & stories in pkl format (The data collected in the demo).
+- **data_analysis.ipynb:** It contains some data analysis for the scraped **nike page** feed.
 
 ## :scroll: Scraping process
 
