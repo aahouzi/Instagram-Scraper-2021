@@ -1,0 +1,5 @@
+webdriver_manager==3.2.2
+pandas==0.24.2
+selenium==3.141.0
+termcolor==1.1.0
+browsermob_proxy==0.8.0
