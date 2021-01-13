@@ -29,7 +29,7 @@ The repository contains the following files & directories:
 their XPath with selenium.
 
 - **For scraping content**, the user is asked to enter the username or hashtag he wants to scrap, then the program gets access
-to the username page. However, sometimes Instagram blocks the direct access to public pages, and asks the user to log in. In this case, the program types
+directly to the username page.**However**, sometimes Instagram blocks the direct access to public pages, and asks the user to log in. In this case, the program types
 some random user account that was created for scraping purposes. After getting access to the page we want to scrape, **Selenium** executes a Javascript
 code that enables to keep scrolling down until all the content is loaded. After this step, we analyze the resulting har file in order to extract all
 graphql responses, in a json format. Finally, we loop through every response to get all the informations we need. Here's a small demo of scraping
@@ -39,6 +39,12 @@ graphql responses, in a json format. Finally, we loop through every response to 
 ![](https://j.gifs.com/k8YDNX.gif)
 
 
+## :bulb: Scraping comments
+An improvement for this project would be to use the same technique of the har file to scrap all comments given the link of a certain publication. It can be easily
+implemented using the same strategy: "We start by having access to the publication (Format: https://www.instagram.com/p/***********), and scrolling up comments,
+and clicking every time on the plus button to load more comments. The more we click on the plus button, the more we collect graphql responses,
+and so comments (12 comments per graphql response). **However**, scrapping comments will take much more time than scraping content, since we can have thousands
+of comments in a publication, and getting 12 comments per graphql response is time consuming.
 
 
 ---
