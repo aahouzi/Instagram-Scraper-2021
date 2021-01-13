@@ -41,8 +41,8 @@ graphql responses, in a json format. Finally, we loop through every response to 
 
 ## :bulb: Scraping comments
 An improvement for this project would be to use the same technique of the har file to scrap all comments given the link of a certain publication. It can be easily
-implemented using the same strategy: "We start by having access to the publication (Format: https://www.instagram.com/p/***********), and scrolling up comments,
-and clicking every time on the plus button to load more comments. The more we click on the plus button, the more we collect graphql responses,
+implemented using the same strategy: "We start by having access to the publication (Format: https://www.instagram.com/p/***********), scrolling up comments and
+clicking every time on the plus button to load more comments". The more we click on the plus button, the more we collect graphql responses,
 and so comments (12 comments per graphql response). **However**, scrapping comments will take much more time than scraping content, since we can have thousands
 of comments in a publication, and getting 12 comments per graphql response is time consuming.
 
