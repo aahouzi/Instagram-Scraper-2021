@@ -18,7 +18,7 @@ from selenium import webdriver
 from datetime import datetime
 from termcolor import colored
 import pandas as pd
-import time, json
+import time, json, os
 
 
 ################################################################################
@@ -61,7 +61,8 @@ def process_first_posts(account, driver):
 
     # Get access to the link
     driver.get(posts)
-    time.sleep(2)
+    time.sleep(3)
+
     data = json.loads(driver.find_element_by_xpath("/html/body/pre").text)
 
     # Print the total number of posts
@@ -211,10 +212,14 @@ def process_graphql_response(url, driver):
 
 # Asking the client for the username or hashtag he wants to scrap
 account = input(colored("\n[INFO]: Please enter the username or hashtag you want to scrap from: ", "yellow"))
+project_direc = os.getcwd()[:-8]
 main_url = "https://www.instagram.com/{}/".format(account)
 
 # Configure the browsermob-proxy settings
-server = Server("browsermob-proxy-2.1.4/bin/browsermob-proxy", options={"port": 8000})
+
+# Here, specify the full path to ur browsermob proxy
+proxy_path = os.path.join(project_direc, "browsermob-proxy-2.1.4/bin/browsermob-proxy")
+server = Server(proxy_path, options={"port": 8000})
 server.start()
 proxy = server.create_proxy()
 
@@ -297,7 +302,7 @@ while True:
         duration_scrap = round(time.time()-start_scrap, 2)
         print(colored("\n[SUCCESS]: Finished scrapping {} posts, it took {}s. \n".format(len(rows), duration_scrap), "green"))
         df = pd.DataFrame(rows)
-        df.to_pickle("collected_data/feed.pkl")
+        df.to_pickle(os.path.join(project_direc, "collected_data/feed.pkl"))
         break
 
     except Exception as e:
