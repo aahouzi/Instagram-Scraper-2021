@@ -13,6 +13,7 @@
 #                                   Packages                                   #
 ################################################################################
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException
 from browsermobproxy import Server
 from selenium import webdriver
 from datetime import datetime
@@ -46,6 +47,7 @@ def scroll_down(driver, sec=4):
         if new_height == last_height:
             break
         last_height = new_height
+        sec += 1
 
 
 def process_first_posts(account, driver):
@@ -138,10 +140,26 @@ def process_graphql_response(url, driver):
     :param driver: Chrome driver.
     :return: A list of dicts.
     """
-    driver.get(url)
-    time.sleep(2)
-    driver.get_screenshot_as_file("json.png")
-    data = json.loads(driver.find_element_by_xpath("/html/body/pre").text)
+    while True:
+        try:
+            driver.get(url)
+            time.sleep(2)
+            driver.get_screenshot_as_file("json.png")
+            data = json.loads(driver.find_element_by_xpath("/html/body/pre").text)
+            break
+        except:
+            print(colored("\n[INFO]: Failed extracting a graphQl response, now trying to access from "
+                          "the login page to which we were redirected. \n", "yellow"))
+
+            # Connect with an instagram account
+            username = driver.find_element_by_name("username")
+            password = driver.find_element_by_name("password")
+            username.send_keys("testtest7530")
+            password.send_keys("testtest753")
+            driver.find_element_by_xpath("//*[@id='loginForm']/div/div[3]/button/div").click()
+            time.sleep(6)
+
+            print(colored("\n[INFO]: Logged into the website. \n", "yellow"))
 
     rows = []
     # Handling the case of the first graphql response, that doesn't contain any info
@@ -277,8 +295,18 @@ while True:
         # Scroll to the bottom of the page to get all the content
         print(colored("\n[INFO]: Start scrolling to the bottom of the page to get all the content. \n", "yellow"))
         proxy.new_har("new_har", options={'captureHeaders': False})
+
+        # There are some instagram pages that don't load content as u scroll, and u need first to click on a button
+        # to start loading content
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
         start_scroll = time.time()
-        scroll_down(driver)
+        try:
+            driver.find_element_by_xpath("/html/body/div[1]/section/main/div/div[2]/div[1]/div/button").click()
+            scroll_down(driver)
+        except:
+            scroll_down(driver)
+
         duration_scroll = round(time.time()-start_scroll, 2)
         print(colored("\n[SUCCESS]: Finished scrolling, it took {}s. \n".format(duration_scroll), "green"))
 
