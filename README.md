@@ -48,7 +48,9 @@ of comments in a publication, and getting 12 comments per graphql response is ti
 
 
 ---
-## :mailbox_closed: Contact
+## :mailbox_closed: License & Contact
+This code is free to use, share and modify for any non-commercial purposes, any commercial use is strictly prohibited without the authors' consent.
+This project is for educational purposes, and has no intent to mess with Instagram policies concerning data privacy.
 For any information, feedback or questions, please [contact me][anas-email]
 
 
