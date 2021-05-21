@@ -249,7 +249,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_argument('--allow-running-insecure-content')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
-# options.add_argument('--headless')
+options.add_argument('--headless')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 
