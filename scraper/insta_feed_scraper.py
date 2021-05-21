@@ -249,7 +249,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_argument('--allow-running-insecure-content')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
-options.add_argument('--headless')
+# options.add_argument('--headless')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 
@@ -262,7 +262,7 @@ while True:
             time.sleep(4)
 
             # Accept cookies & take a screenshot of the welcome page
-            cookies = driver.find_element_by_xpath("/html/body/div[2]/div/div/div/div[2]/button[1]").click()
+            cookies = driver.find_element_by_xpath("/html/body/div[2]/div/div/button[1]").click()
             driver.get_screenshot_as_file("welcome_page.png")
 
             if driver.current_url == main_url:
@@ -284,11 +284,7 @@ while True:
 
             print(colored("\n[SUCCESS]: Logged into the website. \n", "green"))
 
-            # Look for the hashtag or user to scrape
-            research = driver.find_element_by_xpath("//*[@id='react-root']/section/nav/div[2]/div/div/div[2]/input")
-            research.send_keys(account)
-            time.sleep(4)
-            driver.find_element_by_xpath("//*[@id='react-root']/section/nav/div[2]/div/div/div[2]/div[4]/div/a[1]").click()
+            driver.get(main_url)
 
             print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
 
