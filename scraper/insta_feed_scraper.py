@@ -25,12 +25,13 @@ import time, json, os
 ################################################################################
 #                                  Main Code                                   #
 ################################################################################
-def scroll_down(driver, sec=4):
+def scroll_down(driver, sec=3, m=1.5):
     """
     This function enables Chrome driver to keep scrolling down until all the content
     is loaded.
     :param driver: Chrome driver.
     :param sec: Time to wait between two scrolls (depends on ur internet connection).
+    :param m: Incrementation parameter to add after each iteration.
     :return:
     """
     # Get scroll height.
@@ -47,7 +48,7 @@ def scroll_down(driver, sec=4):
         if new_height == last_height:
             break
         last_height = new_height
-        sec += 1
+        sec += m
 
 
 def process_first_posts(account, driver):
@@ -152,10 +153,10 @@ def process_graphql_response(url, driver):
                           "the login page to which we were redirected. \n", "yellow"))
 
             # Connect with an instagram account
-            username = driver.find_element_by_name("username")
-            password = driver.find_element_by_name("password")
-            username.send_keys("testtest7530")
-            password.send_keys("testtest753")
+            user, mdp = input(colored("\n[INFO]: In order to carry on scraping, type a username"
+                                      " and its password seperated by one space: ", "yellow")).split()
+            driver.find_element_by_name("username").send_keys(user)
+            driver.find_element_by_name("password").send_keys(mdp)
             driver.find_element_by_xpath("//*[@id='loginForm']/div/div[3]/button/div").click()
             time.sleep(6)
 
@@ -252,41 +253,55 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
 options.add_argument('--headless')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
-
 failure = 0
 while True:
     try:
         if not failure:
             print(colored("\n[INFO]: Getting access to the user or hashtag website .. \n", "yellow"))
-            driver.get(main_url)
-            time.sleep(4)
 
-            # Accept cookies & take a screenshot of the welcome page
-            cookies = driver.find_element_by_xpath("/html/body/div[2]/div/div/button[1]").click()
+            # Make sure that we got into the welcome page
+            while True:
+                driver.get(main_url)
+                time.sleep(3)
+                try:
+                    if driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2"):
+                        print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
+                        break
+                except NoSuchElementException:
+                    pass
+
+                try:
+                    if driver.find_element_by_name("username"):
+                        raise Exception("Instagram redirected us to a login page")
+                except NoSuchElementException:
+                    pass
+
+            # Take a screenshot of the welcome page
             driver.get_screenshot_as_file("welcome_page.png")
-
-            if driver.current_url == main_url:
-                print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
-            else:
-                raise Exception("Instagram redirected us to a login page")
 
         elif failure == 200:
             print(colored("\n[INFO]: Failed once, now trying to access from "
                           "the login page to which we were redirected. \n", "yellow"))
 
             # Connect with an instagram account
-            username = driver.find_element_by_name("username")
-            password = driver.find_element_by_name("password")
-            username.send_keys("testtest7530")
-            password.send_keys("testtest753")
+            user, mdp = input(colored("\n[INFO]: Please type a username and its password seperated by one space"
+                                      " for login: ", "yellow")).split()
+            driver.find_element_by_name("username").send_keys(user)
+            driver.find_element_by_name("password").send_keys(mdp)
             driver.find_element_by_xpath("//*[@id='loginForm']/div/div[3]/button/div").click()
-            time.sleep(6)
-
+            time.sleep(10)
             print(colored("\n[SUCCESS]: Logged into the website. \n", "green"))
 
-            driver.get(main_url)
-
-            print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
+            # Make sure that we get into the welcome page
+            while True:
+                driver.get(main_url)
+                time.sleep(3)
+                try:
+                    if driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2"):
+                        print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
+                        break
+                except NoSuchElementException:
+                    pass
 
         # Scroll to the bottom of the page to get all the content
         print(colored("\n[INFO]: Start scrolling to the bottom of the page to get all the content. \n", "yellow"))
@@ -298,9 +313,9 @@ while True:
         time.sleep(2)
         start_scroll = time.time()
         try:
-            driver.find_element_by_xpath("/html/body/div[1]/section/main/div/div[2]/div[1]/div/button").click()
+            driver.find_element_by_xpath("/html/body/div[1]/section/main/div/div[3]/div[1]/div/button").click()
             scroll_down(driver)
-        except:
+        except NoSuchElementException:
             scroll_down(driver)
 
         duration_scroll = round(time.time()-start_scroll, 2)
