@@ -142,13 +142,13 @@ def process_graphql_response(url, driver):
     :return: A list of dicts.
     """
     while True:
+        driver.get(url)
+        time.sleep(2)
+        driver.get_screenshot_as_file("json.png")
         try:
-            driver.get(url)
-            time.sleep(2)
-            driver.get_screenshot_as_file("json.png")
             data = json.loads(driver.find_element_by_xpath("/html/body/pre").text)
             break
-        except:
+        except NoSuchElementException:
             print(colored("\n[INFO]: Failed extracting a graphQl response, now trying to access from "
                           "the login page to which we were redirected. \n", "yellow"))
 
@@ -158,8 +158,7 @@ def process_graphql_response(url, driver):
             driver.find_element_by_name("username").send_keys(user)
             driver.find_element_by_name("password").send_keys(mdp)
             driver.find_element_by_xpath("//*[@id='loginForm']/div/div[3]/button/div").click()
-            time.sleep(6)
-
+            time.sleep(4)
             print(colored("\n[INFO]: Logged into the website. \n", "yellow"))
 
     rows = []
@@ -233,6 +232,7 @@ def process_graphql_response(url, driver):
 account = input(colored("\n[INFO]: Please enter the username or hashtag you want to scrap from: ", "yellow"))
 project_direc = os.getcwd()[:-8]
 main_url = "https://www.instagram.com/{}/".format(account)
+login_url = "https://www.instagram.com/accounts/login/"
 
 # Configure the browsermob-proxy settings
 
@@ -261,23 +261,13 @@ while True:
 
             # Make sure that we got into the welcome page
             while True:
-                driver.get(main_url)
+                driver.get(login_url)
                 time.sleep(3)
-                try:
-                    if driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2"):
-                        print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
-                        break
-                except NoSuchElementException:
-                    pass
-
                 try:
                     if driver.find_element_by_name("username"):
                         raise Exception("Instagram redirected us to a login page")
                 except NoSuchElementException:
                     pass
-
-            # Take a screenshot of the welcome page
-            driver.get_screenshot_as_file("welcome_page.png")
 
         elif failure == 200:
             print(colored("\n[INFO]: Failed once, now trying to access from "
@@ -302,6 +292,9 @@ while True:
                         break
                 except NoSuchElementException:
                     pass
+
+            # Take a screenshot of the welcome page
+            driver.get_screenshot_as_file("welcome_page.png")
 
         # Scroll to the bottom of the page to get all the content
         print(colored("\n[INFO]: Start scrolling to the bottom of the page to get all the content. \n", "yellow"))
