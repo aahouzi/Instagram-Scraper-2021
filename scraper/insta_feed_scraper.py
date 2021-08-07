@@ -25,13 +25,13 @@ import time, json, os
 ################################################################################
 #                                  Main Code                                   #
 ################################################################################
-def scroll_down(driver, sec=3, m=1.5):
+def scroll_down(driver, sec=1, timeout=60):
     """
     This function enables Chrome driver to keep scrolling down until all the content
     is loaded.
     :param driver: Chrome driver.
     :param sec: Time to wait between two scrolls (depends on ur internet connection).
-    :param m: Incrementation parameter to add after each iteration.
+    :param timeout: Timeout for which we stop scrolling.
     :return:
     """
     # Get scroll height.
@@ -40,15 +40,22 @@ def scroll_down(driver, sec=3, m=1.5):
     while True:
         # Scroll down to the bottom.
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
         # Wait to load the page.
-        time.sleep(sec)
+        duree = 0
+        while last_height == driver.execute_script("return document.body.scrollHeight"):
+            time.sleep(sec)
+            duree += sec
+            if duree >= timeout:
+                break
+
         # Calculate new scroll height and compare with last scroll height.
         new_height = driver.execute_script("return document.body.scrollHeight")
 
         if new_height == last_height:
             break
+
         last_height = new_height
-        sec += m
 
 
 def process_first_posts(account, driver):
@@ -250,7 +257,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_argument('--allow-running-insecure-content')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
-options.add_argument('--headless')
+# options.add_argument('--headless')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 failure = 0
