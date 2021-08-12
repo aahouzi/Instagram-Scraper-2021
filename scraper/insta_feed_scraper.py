@@ -236,10 +236,10 @@ def process_graphql_response(url, driver):
 
 
 # Asking the client for the username or hashtag he wants to scrap
-account = input(colored("\n[INFO]: Please enter the username or hashtag you want to scrap from: ", "yellow"))
-project_direc = os.getcwd()[:-8]
-main_url = "https://www.instagram.com/{}/".format(account)
+account = input(colored("\n[INFO]: Please enter the username you want to scrap from: ", "yellow"))
 login_url = "https://www.instagram.com/accounts/login/"
+main_url = "https://www.instagram.com/{}/".format(account)
+project_direc = os.getcwd()[:-8]
 
 # Configure the browsermob-proxy settings
 
@@ -277,8 +277,8 @@ while True:
                     pass
 
         elif failure == 200:
-            print(colored("\n[INFO]: Failed once, now trying to access from "
-                          "the login page to which we were redirected. \n", "yellow"))
+            print(colored("\n[INFO]: Failed to access directly, now trying to access from"
+                          " the login page to which we were redirected. \n", "yellow"))
 
             # Connect with an instagram account
             user, mdp = input(colored("\n[INFO]: Please type a username and its password seperated by one space"
@@ -295,7 +295,7 @@ while True:
                 time.sleep(3)
                 try:
                     if driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2"):
-                        print(colored("\n[SUCCESS]: Got into the user or hashtag page. \n", "green"))
+                        print(colored("\n[SUCCESS]: Got into the user page. \n", "green"))
                         break
                 except NoSuchElementException:
                     pass
@@ -309,8 +309,8 @@ while True:
 
         # There are some instagram pages that don't load content as u scroll, and u need first to click on a button
         # to start loading content
+        time.sleep(4)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
         start_scroll = time.time()
         try:
             driver.find_element_by_xpath("/html/body/div[1]/section/main/div/div[3]/div[1]/div/button").click()
@@ -341,7 +341,7 @@ while True:
         duration_scrap = round(time.time()-start_scrap, 2)
         print(colored("\n[SUCCESS]: Finished scrapping {} posts, it took {}s. \n".format(len(rows), duration_scrap), "green"))
         df = pd.DataFrame(rows)
-        df.to_pickle(os.path.join(project_direc, "collected_data/feed.pkl"))
+        df.to_pickle(os.path.join(project_direc, "collected_data/feed_{}.pkl".format(account)))
         break
 
     except Exception as e:
