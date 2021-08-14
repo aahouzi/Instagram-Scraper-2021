@@ -264,7 +264,7 @@ failure = 0
 while True:
     try:
         if not failure:
-            print(colored("\n[INFO]: Getting access to the user or hashtag website .. \n", "yellow"))
+            print(colored("\n[INFO]: Getting access to the user website .. \n", "yellow"))
 
             # Make sure that we got into the welcome page
             while True:
@@ -279,6 +279,12 @@ while True:
         elif failure == 200:
             print(colored("\n[INFO]: Failed to access directly, now trying to access from"
                           " the login page to which we were redirected. \n", "yellow"))
+
+            # Accept website cookies
+            try:
+                driver.find_element_by_xpath("/html/body/div[4]/div/div/button[1]").click()
+            except NoSuchElementException:
+                pass
 
             # Connect with an instagram account
             user, mdp = input(colored("\n[INFO]: Please type a username and its password seperated by one space"
