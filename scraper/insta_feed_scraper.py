@@ -14,6 +14,9 @@
 ################################################################################
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
 from browsermobproxy import Server
 from selenium import webdriver
 from datetime import datetime
@@ -300,7 +303,7 @@ while True:
                 driver.get(main_url)
                 time.sleep(3)
                 try:
-                    if driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2"):
+                    if driver.find_element_by_xpath("/html/body/div[1]/div/div/section/main/div/header/section/div[1]/h2"):
                         print(colored("\n[SUCCESS]: Got into the user page. \n", "green"))
                         break
                 except NoSuchElementException:
