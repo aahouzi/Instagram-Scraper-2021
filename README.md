@@ -1,6 +1,4 @@
 # Scrape Instagram content & stories | 2021 version.
-Enseirb-Matmeca, Bordeaux INP | [Anas AHOUZI](https://www.linkedin.com/in/anas-ahouzi-6aab0b155/)
-***
 
 ## :monocle_face: Description
 - This project enables the user to scrape all content and feed of a public instagram page, as well as the stories anonymously given the username
@@ -47,7 +45,7 @@ and so comments (12 comments per graphql response). **However**, scraping commen
 of comments in a publication, and getting 12 comments per graphql response is time consuming.
 
 
----
+
 ## :mailbox_closed: License & Contact
 This code is free to use, share and modify for any non-commercial purposes, any commercial use is strictly prohibited without the authors' consent.
 This project is for educational purposes, and has no intent to mess with Instagram policies concerning data privacy.
